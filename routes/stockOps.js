@@ -69,13 +69,14 @@ router.put("/updatestock/:id", fetchUser, async(req, res) => {
         if (status)
         {
             newStock.status = status;
-            // newStock.buyingDate = Date.now();
-        }
+        //     newStock.buyingDate = Date.now();
+        // }
         // else if (status === "S")
         // {
         //     newStock.status = status;
-        //     // newStock.sellingDate = Date.now();
+        //     newStock.sellingDate = Date.now();
         // }
+        }
 
         let stock = await stockS.findById(req.params.id);
 
