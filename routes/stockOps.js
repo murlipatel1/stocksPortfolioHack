@@ -46,7 +46,7 @@ router.post("/addstock", fetchUser,
                 tickerSymbol,
                 stockName, 
                 status,
-                buyingDate: Date.now,
+                buyingDate: Date.now(),
             });
 
             const saveStock = await stock.save();
@@ -62,24 +62,20 @@ router.post("/addstock", fetchUser,
 //Update Stocks
 router.put("/updatestock/:id", fetchUser, async(req, res) => {
     try{
-        const {tickerSymbol, stockName, status} = req.body;
+        const {status} = req.body;
 
         const newStock = {};
 
-        if (tickerSymbol)   newStock.tickerSymbol = tickerSymbol;
-
-        if (stockName)  newStock.stockName = stockName;
-
-        if (status === "B")
+        if (status)
         {
             newStock.status = status;
-            newStock.buyingDate = Date.now;
+            // newStock.buyingDate = Date.now();
         }
-        else if (status === "S")
-        {
-            newStock.status = status;
-            newStock.sellingDate = Date.now;
-        }
+        // else if (status === "S")
+        // {
+        //     newStock.status = status;
+        //     // newStock.sellingDate = Date.now();
+        // }
 
         let stock = await stockS.findById(req.params.id);
 
@@ -92,12 +88,12 @@ router.put("/updatestock/:id", fetchUser, async(req, res) => {
             return res.status(401).send("Not Allowed!!!");
         }
 
-        stock = await findOneAndUpdate(
+        stock = await stockS.findOneAndUpdate(
             req.params.id,
             {$set: newStock},
             {new: true}
         );
-
+        res.json({ stock });
     } catch (error) {
         console.error(error);
         res.status(500).send("Internal Server Error!!!");
